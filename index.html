@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life with AI | 김건형 선생님의 AI & 생명과학 탐구실</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #fcf8fa;
+            background-image: radial-gradient(#fbcfe8 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col justify-between font-sans">
+
+    <header class="bg-white/90 backdrop-blur-md border-b border-pastel-200 sticky top-0 z-30 shadow-xs">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+            
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('main')">
+                <div class="w-11 h-11 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center shadow-xs shrink-0 relative overflow-hidden group">
+                    <!-- Cute Yellow Tabby Cat SVG Logo -->
+                    <svg class="w-9 h-9" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 40L10 15L38 28Z" fill="#F59E0B" stroke="#D97706" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M20 34L14 18L32 26Z" fill="#F472B6"/>
+                        <path d="M78 40L90 15L62 28Z" fill="#F59E0B" stroke="#D97706" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M80 34L86 18L68 26Z" fill="#F472B6"/>
+                        <circle cx="50" cy="55" r="36" fill="#FBBF24" stroke="#D97706" stroke-width="3"/>
+                        <path d="M50 21V33M42 24V32M58 24V32" stroke="#D97706" stroke-width="3" stroke-linecap="round"/>
+                        <ellipse cx="42" cy="62" rx="10" ry="8" fill="#FFFBEB"/>
+                        <ellipse cx="58" cy="62" rx="10" ry="8" fill="#FFFBEB"/>
+                        <ellipse cx="36" cy="52" rx="4" ry="5" fill="#4B5563"/>
+                        <circle cx="37.5" cy="50.5" r="1.5" fill="white"/>
+                        <ellipse cx="64" cy="52" rx="4" ry="5" fill="#4B5563"/>
+                        <circle cx="65.5" cy="50.5" r="1.5" fill="white"/>
+                        <polygon points="50,58 46,55 54,55" fill="#F472B6"/>
+                        <path d="M46 62C48 65 50 64 50 62C50 64 52 65 54 62" stroke="#92400E" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="36" cy="52" r="9" stroke="#3B82F6" stroke-width="2.5" fill="none"/>
+                        <circle cx="64" cy="52" r="9" stroke="#3B82F6" stroke-width="2.5" fill="none"/>
+                        <line x1="45" y1="52" x2="55" y2="52" stroke="#3B82F6" stroke-width="2.5"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="font-extrabold text-gray-900 text-lg tracking-tight">Life with AI</h1>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-300 flex items-center space-x-1">
+                            <span>🐾 냥쌤과 탐구</span>
+                        </span>
+                        <span class="bg-pastel-100 text-pastel-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-pastel-200">
+                            김건형 선생님
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500">인공지능과 함께하는 생명과학 탐구 교실</p>
+                </div>
+            </div>
+
+            <!-- Header Right: Auth State Indicator -->
+            <div id="auth-container" class="flex items-center space-x-2">
+                <!-- Rendered via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center space-x-2 border-t border-gray-100 pt-2 pb-2 overflow-x-auto">
+            <button id="nav-main" onclick="switchTab('main')" class="tab-btn active px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 bg-pastel-100 text-pastel-700">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span>메인 & 공지사항</span>
+            </button>
+            <button id="nav-materials" onclick="switchTab('materials')" class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 hover:text-pastel-700 hover:bg-pastel-50 transition flex items-center space-x-2">
+                <i class="fa-solid fa-folder-open text-sm"></i>
+                <span>학습 자료실</span>
+            </button>
+            <button id="nav-assignments" onclick="switchTab('assignments')" class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 hover:text-pastel-700 hover:bg-pastel-50 transition flex items-center space-x-2">
+                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                <span>과제 제출함</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full">
+
+        <!-- ================= TAB 1: MAIN & NOTICES ================= -->
+        <section id="tab-main" class="tab-content block space-y-6">
+            
+            <!-- Welcome Header Card -->
+            <div class="bg-white border border-pastel-200 rounded-2xl p-6 shadow-xs relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-amber-100/50 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+                <div class="flex items-start space-x-4">
+                    <div class="p-2 bg-amber-50 border border-amber-200 rounded-2xl shrink-0 shadow-xs">
+                        <svg class="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 40L10 15L38 28Z" fill="#F59E0B" stroke="#D97706" stroke-width="3"/>
+                            <path d="M20 34L14 18L32 26Z" fill="#F472B6"/>
+                            <path d="M78 40L90 15L62 28Z" fill="#F59E0B" stroke="#D97706" stroke-width="3"/>
+                            <path d="M80 34L86 18L68 26Z" fill="#F472B6"/>
+                            <circle cx="50" cy="55" r="36" fill="#FBBF24" stroke="#D97706" stroke-width="3"/>
+                            <path d="M50 21V33M42 24V32M58 24V32" stroke="#D97706" stroke-width="3" stroke-linecap="round"/>
+                            <ellipse cx="42" cy="62" rx="10" ry="8" fill="#FFFBEB"/>
+                            <ellipse cx="58" cy="62" rx="10" ry="8" fill="#FFFBEB"/>
+                            <ellipse cx="36" cy="52" rx="4" ry="5" fill="#4B5563"/>
+                            <circle cx="37.5" cy="50.5" r="1.5" fill="white"/>
+                            <ellipse cx="64" cy="52" rx="4" ry="5" fill="#4B5563"/>
+                            <circle cx="65.5" cy="50.5" r="1.5" fill="white"/>
+                            <polygon points="50,58 46,55 54,55" fill="#F472B6"/>
+                            <path d="M46 62C48 65 50 64 50 62C50 64 52 65 54 62" stroke="#92400E" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="36" cy="52" r="9" stroke="#3B82F6" stroke-width="2.5" fill="none"/>
+                            <circle cx="64" cy="52" r="9" stroke="#3B82F6" stroke-width="2.5" fill="none"/>
+                            <line x1="45" y1="52" x2="55" y2="52" stroke="#3B82F6" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <h2 class="text-lg font-bold text-gray-900">환영합니다! 김건형 선생님의 'Life with AI' 탐구 공간입니다.</h2>
+                            <span class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-amber-300">
+                                🐾 연구원 냥쌤 상주 중
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            본 홈페이지는 AI와 생명과학의 융합 주제를 탐구하고, 수업 자료를 확인하며 개인 과제를 실시간 DB에 안전하게 제출할 수 있는 전용 웹 공간입니다. 
+                            페이지 맨 아래 **수업 달력**에서 주요 일정과 선생님의 특이사항 안내를 확인해보세요!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice & Recommended Books Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Notice Block -->
+                <div class="md:col-span-2 bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-4">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-bullhorn text-pastel-500"></i>
+                            <h3 class="font-bold text-gray-900 text-sm">주요 수업 공지사항</h3>
+                        </div>
+                        <span class="text-[11px] text-gray-400">2026학년도 1학기</span>
+                    </div>
+
+                    <ul class="space-y-3 text-xs">
+                        <li class="p-3 bg-pastel-50/60 rounded-xl border border-pastel-100 flex items-start justify-between gap-3">
+                            <div>
+                                <span class="font-bold text-pastel-700">[필독] AlphaFold2 기반 단백질 구조 예측 과제 안내</span>
+                                <p class="text-gray-600 mt-1">1주차 수업 자료실의 PDF 및 PDB 구조 파일 예시를 참고하여 보고서를 작성 후 과제 제출함에 제출하세요.</p>
+                            </div>
+                            <span class="shrink-0 text-[10px] bg-white px-2 py-0.5 rounded border border-pastel-200 text-pastel-600 font-medium">New</span>
+                        </li>
+                        <li class="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-start justify-between gap-3">
+                            <div>
+                                <span class="font-bold text-gray-800">[안내] 실시간 DB 연동 및 개인 과제 보안 설정</span>
+                                <p class="text-gray-500 mt-1">제출글은 Firebase Cloud DB에 동기화되며 설정한 비밀번호로 본인만 열람할 수 있습니다.</p>
+                            </div>
+                            <span class="shrink-0 text-[10px] text-gray-400">공지</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Recommended Books Card -->
+                <div class="bg-white border border-pastel-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-2.5">
+                        <div class="flex items-center space-x-1.5 text-pastel-600 font-bold text-xs">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                            <span>냥쌤의 추천 도서</span>
+                        </div>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">교보문고 연동 🐾</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <a href="https://product.kyobobook.co.kr/detail/S000000407715" target="_blank" rel="noopener noreferrer" class="group flex items-center space-x-3 p-2 rounded-xl bg-pastel-50/60 hover:bg-pastel-100/80 border border-pastel-100 hover:border-pastel-300 transition duration-200">
+                            <div class="w-14 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0 shadow-xs relative border border-gray-200 group-hover:scale-105 transition transform duration-200">
+                                <img src="https://contents.kyobobook.co.kr/s3/fo-kobo/cv/S000000407715.jpg" alt="탄생의 과학 표지" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/120x160/fbcfe8/db2777?text=탄생의+과학';">
+                            </div>
+                            <div class="flex-grow space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold text-pastel-700 bg-white px-1.5 py-0.5 rounded border border-pastel-200">생명과학</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400 group-hover:text-pastel-600 transition"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-900 text-xs line-clamp-1 group-hover:text-pastel-700 transition">탄생의 과학</h4>
+                                <p class="text-[10px] text-gray-500 line-clamp-1">최영은 저 | 웅진지식하우스</p>
+                            </div>
+                        </a>
+
+                        <a href="https://product.kyobobook.co.kr/detail/S000218858785" target="_blank" rel="noopener noreferrer" class="group flex items-center space-x-3 p-2 rounded-xl bg-pastel-50/60 hover:bg-pastel-100/80 border border-pastel-100 hover:border-pastel-300 transition duration-200">
+                            <div class="w-14 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0 shadow-xs relative border border-gray-200 group-hover:scale-105 transition transform duration-200">
+                                <img src="https://contents.kyobobook.co.kr/s3/fo-kobo/cv/S000218858785.jpg" alt="거의 모든 것의 역사 표지" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/120x160/fbcfe8/db2777?text=거의+모든+것의+역사';">
+                            </div>
+                            <div class="flex-grow space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold text-pastel-700 bg-white px-1.5 py-0.5 rounded border border-pastel-200">자연과학</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400 group-hover:text-pastel-600 transition"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-900 text-xs line-clamp-1 group-hover:text-pastel-700 transition">거의 모든 것의 역사 2.0</h4>
+                                <p class="text-[10px] text-gray-500 line-clamp-1">빌 브라이슨 저 | 까치</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 2: LEARNING MATERIALS ================= -->
+        <section id="tab-materials" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-1 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+                    <button onclick="filterMaterials('all', this)" class="mat-filter-btn active-filter bg-pastel-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap">
+                        전체
+                    </button>
+                    <button onclick="filterMaterials('ai', this)" class="mat-filter-btn bg-gray-100 text-gray-600 hover:bg-pastel-100 text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap">
+                        AI 기초
+                    </button>
+                    <button onclick="filterMaterials('bio', this)" class="mat-filter-btn bg-gray-100 text-gray-600 hover:bg-pastel-100 text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap">
+                        생명과학 X AI
+                    </button>
+                    <button onclick="filterMaterials('dataset', this)" class="mat-filter-btn bg-gray-100 text-gray-600 hover:bg-pastel-100 text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap">
+                        실습 데이터셋
+                    </button>
+                </div>
+
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="mat-search" onkeyup="searchMaterials()" placeholder="자료 검색..." class="w-full text-xs pl-8 pr-3 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
+                </div>
+            </div>
+
+            <!-- Materials Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="mat-item mat-category-bio bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-3 flex flex-col justify-between hover:border-pastel-300 transition">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">PDF 가이드</span>
+                            <span class="text-[11px] text-gray-400">1주차</span>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-sm">AlphaFold DB 활용 단백질 구조 분석 가이드</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2">AlphaFold Database에서 아미노산 서열을 입력하여 3D 구조 및 pLDDT 점수를 파악하는 가이드 문서입니다.</p>
+                    </div>
+                    <button onclick="downloadFile('AlphaFold2_실습가이드.pdf')" class="w-full bg-pastel-50 hover:bg-pastel-100 border border-pastel-200 text-pastel-700 text-xs font-bold py-2 rounded-xl transition flex items-center justify-center space-x-1">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>가이드 PDF 다운로드</span>
+                    </button>
+                </div>
+
+                <div class="mat-item mat-category-ai bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-3 flex flex-col justify-between hover:border-pastel-300 transition">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded">동영상 강의</span>
+                            <span class="text-[11px] text-gray-400">시청 자료</span>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-sm">인공지능과 단백질 접힘 문제 특강</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2">단백질 접힘(Protein Folding) 문제를 해결한 AlphaFold2의 원리와 구조 생물학적 의미 시청.</p>
+                    </div>
+                    <button onclick="openVideoModal('https://www.youtube.com/embed/gg7WjuFs8F4', '인공지능과 단백질 접힘 문제 특강')" class="w-full bg-pastel-500 hover:bg-pastel-600 text-white text-xs font-bold py-2 rounded-xl transition flex items-center justify-center space-x-1 shadow-xs">
+                        <i class="fa-solid fa-circle-play"></i>
+                        <span>강의 영상 시청하기</span>
+                    </button>
+                </div>
+
+                <div class="mat-item mat-category-dataset bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-3 flex flex-col justify-between hover:border-pastel-300 transition">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">CSV 데이터</span>
+                            <span class="text-[11px] text-gray-400">2주차</span>
+                        </div>
+                        <h3 class="font-bold text-gray-900 text-sm">암 유전자 발현 데이터셋 (NCBI 샘플)</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2">머신러닝 분류 모델 실습용 유전자 발현량 CSV 샘플 데이터 파일입니다.</p>
+                    </div>
+                    <button onclick="downloadFile('gene_expression_sample.csv')" class="w-full bg-pastel-50 hover:bg-pastel-100 border border-pastel-200 text-pastel-700 text-xs font-bold py-2 rounded-xl transition flex items-center justify-center space-x-1">
+                        <i class="fa-solid fa-table"></i>
+                        <span>데이터셋 CSV 다운로드</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: ASSIGNMENT SUBMISSION ================= -->
+        <section id="tab-assignments" class="tab-content hidden space-y-6">
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-list-check text-pastel-500"></i>
+                        <span>진행 중인 과제 목록 (클릭시 아래 제출 양식으로 자동 입력됩니다)</span>
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div onclick="selectAssignmentTask('[1주차] AlphaFold2 기반 단백질 3D 구조 분석 보고서')" class="bg-white border border-pastel-200 hover:border-pastel-400 p-4 rounded-xl shadow-xs cursor-pointer transition space-y-2 hover:shadow-md group">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-pastel-100 text-pastel-700 text-[10px] font-bold px-2 py-0.5 rounded">마감임박</span>
+                            <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-pastel-500 transition"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-pastel-600 transition">[1주차] AlphaFold2 기반 단백질 3D 구조 분석 보고서</h4>
+                        <p class="text-gray-500 text-[11px]">인슐린 또는 타깃 단백질 서열을 AlphaFold DB에서 찾아 구조 파악 후 작성</p>
+                    </div>
+
+                    <div onclick="selectAssignmentTask('[2주차] 암 유전자 머신러닝 데이터셋 분류 실습')" class="bg-white border border-pastel-200 hover:border-pastel-400 p-4 rounded-xl shadow-xs cursor-pointer transition space-y-2 hover:shadow-md group">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">진행중</span>
+                            <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-pastel-500 transition"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-pastel-600 transition">[2주차] 암 유전자 머신러닝 데이터셋 분류 실습</h4>
+                        <p class="text-gray-500 text-[11px]">제공된 CSV 데이터셋 기반 유전자 분류 코드 작성 및 정확도 측정</p>
+                    </div>
+
+                    <div onclick="selectAssignmentTask('[3주차] AI 기반 유전자 편집 기술(CRISPR) 윤리적 탐구')" class="bg-white border border-pastel-200 hover:border-pastel-400 p-4 rounded-xl shadow-xs cursor-pointer transition space-y-2 hover:shadow-md group">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-gray-100 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded">예정</span>
+                            <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-pastel-500 transition"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-pastel-600 transition">[3주차] AI 기반 유전자 편집 기술(CRISPR) 윤리적 탐구</h4>
+                        <p class="text-gray-500 text-[11px]">유전자가위 오프타깃 예측 AI 알고리즘의 윤리적 쟁점과 견해 정리</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submission Form -->
+            <div id="submission-form-container" class="bg-white border border-pastel-200 rounded-2xl p-6 shadow-xs space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-pastel-500"></i>
+                        <span>내 과제 제출하기 (개인 비밀번호 설정 필수)</span>
+                    </h3>
+                    <span class="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-lg">
+                        🔒 제출된 과제는 설정한 비밀번호로 본인만 열람 가능 (Firebase Cloud DB 저장)
+                    </span>
+                </div>
+
+                <form id="submission-form" class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">학번 <span class="text-red-500">*</span></label>
+                            <input type="text" id="student-id" required placeholder="예: 20101" class="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">이름 <span class="text-red-500">*</span></label>
+                            <input type="text" id="student-name" required placeholder="예: 홍길동" class="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">비밀번호 (열람용) <span class="text-red-500">*</span></label>
+                            <input type="password" id="student-password" required placeholder="4자리 이상 숫자/문자" class="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">과제 제목 <span class="text-red-500">*</span></label>
+                        <input type="text" id="post-title" required placeholder="위 과제 카드를 클릭하거나 직접 입력하세요" class="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">탐구 요약 및 제출 내용 <span class="text-red-500">*</span></label>
+                        <textarea id="post-content" rows="4" required placeholder="탐구 내용, AlphaFold 분석 pLDDT 점수, 결론 등을 작성하세요..." class="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none resize-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">보고서 및 첨부파일 이름 (선택)</label>
+                        <input type="file" id="post-file" class="w-full p-2 rounded-xl border border-gray-200 text-gray-500 bg-gray-50 focus:outline-none">
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full bg-pastel-500 hover:bg-pastel-600 disabled:bg-gray-300 text-white font-bold py-3 rounded-xl transition shadow-md shadow-pastel-200 text-xs">
+                        Firebase Cloud DB에 과제 제출하기
+                    </button>
+                </form>
+            </div>
+
+            <!-- Board List -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-folder-closed text-pastel-500"></i>
+                        <span>제출된 과제 목록 (실시간 DB 연동)</span>
+                    </h3>
+                    <span class="text-xs text-gray-500">비밀번호 입력 시 본인 제출물 열람 가능</span>
+                </div>
+
+                <div id="board-list" class="space-y-3">
+                    <!-- Dynamic rendering via Firebase onSnapshot -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CLASSROOM CALENDAR SECTION ================= -->
+        <section id="calendar-section" class="mt-8 bg-white border border-pastel-200 rounded-2xl p-6 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0">
+                        <svg class="w-7 h-7" viewBox="0 0 100 100" fill="none">
+                            <path d="M22 40L10 15L38 28Z" fill="#F59E0B" stroke="#D97706" stroke-width="3"/>
+                            <circle cx="50" cy="55" r="36" fill="#FBBF24" stroke="#D97706" stroke-width="3"/>
+                            <ellipse cx="42" cy="62" rx="10" ry="8" fill="#FFFBEB"/>
+                            <ellipse cx="58" cy="62" rx="10" ry="8" fill="#FFFBEB"/>
+                            <ellipse cx="36" cy="52" rx="4" ry="5" fill="#4B5563"/>
+                            <polygon points="50,58 46,55 54,55" fill="#F472B6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-base flex items-center space-x-2">
+                            <span>🐾 냥쌤의 수업 달력 & 일정 안내 (Firebase DB 저장)</span>
+                        </h3>
+                        <p class="text-xs text-gray-500">날짜를 클릭하여 특이사항 및 과제 일정 노트를 확인하세요.</p>
+                    </div>
+                </div>
+
+                <!-- Month Navigator -->
+                <div class="flex items-center space-x-2 bg-pastel-50 border border-pastel-200 rounded-xl p-1">
+                    <button onclick="changeMonth(-1)" class="p-1.5 text-pastel-700 hover:bg-pastel-200/60 rounded-lg transition">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    <span id="calendar-month-year" class="text-xs font-bold text-pastel-800 px-3 min-w-[100px] text-center">
+                        2026년 3월
+                    </span>
+                    <button onclick="changeMonth(1)" class="p-1.5 text-pastel-700 hover:bg-pastel-200/60 rounded-lg transition">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div>
+                <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-500 mb-2">
+                    <span class="text-red-500">일</span>
+                    <span>월</span>
+                    <span>화</span>
+                    <span>수</span>
+                    <span>목</span>
+                    <span>금</span>
+                    <span class="text-blue-500">토</span>
+                </div>
+
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1 sm:gap-2">
+                    <!-- Dynamic Days -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-6 mt-12 text-center text-xs text-gray-400 flex flex-col items-center justify-center space-y-1">
+        <div class="flex items-center space-x-1">
+            <span>🐾</span>
+            <span>© 2026 Life with AI | 김건형 선생님 & 냥쌤의 생명과학 X AI 탐구 교실</span>
+        </div>
+    </footer>
+
+    <!-- Modals & Toasts -->
+    <!-- Calendar Note Modal -->
+    <div id="calendar-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-amber-500">🐾</span>
+                    <h3 id="cal-modal-date" class="font-bold text-gray-900 text-sm">2026-03-15 특이사항</h3>
+                </div>
+                <button onclick="closeCalendarModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="cal-modal-body" class="space-y-3"></div>
+            <div id="cal-modal-actions" class="flex items-center justify-end space-x-2"></div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl space-y-3 p-4">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+                <h3 id="modal-video-title" class="font-bold text-gray-900 text-sm">강의 시청</h3>
+                <button onclick="closeVideoModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
+                <iframe id="modal-iframe" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Auth Modal -->
+    <div id="teacher-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-pastel-500"></i>
+                    <span>김건형 선생님 전용 인증</span>
+                </h3>
+                <button onclick="closeTeacherModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <p class="text-xs text-gray-500">교사 비밀번호를 입력하면 모든 학생의 과제를 조회할 수 있습니다.</p>
+            <input type="password" id="teacher-pwd-input" placeholder="교사 비밀번호 (기본: 1234)" class="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+            <button onclick="verifyTeacherPassword()" class="w-full bg-pastel-500 hover:bg-pastel-600 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                교사 인증 로그인
+            </button>
+        </div>
+    </div>
+
+    <!-- Password Unlock Modal -->
+    <div id="pwd-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-key text-pastel-500"></i>
+                    <span>게시글 비밀번호 입력</span>
+                </h3>
+                <button onclick="closePwdModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <p class="text-xs text-gray-500">해당 과제를 제출할 때 설정한 비밀번호를 입력하세요.</p>
+            <input type="password" id="modal-pwd-input" placeholder="비밀번호 입력" class="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none">
+            <button onclick="verifyModalPassword()" class="w-full bg-pastel-500 hover:bg-pastel-600 text-white font-bold py-2.5 rounded-xl transition text-xs">
+                비밀번호 확인
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-info text-pastel-300"></i>
+        <span id="toast-message">알림 메시지</span>
+    </div>
+
+    <!-- Firebase Module Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyCx1aCR8wWQ_KXXPPFGpUjzInOK-cYd8B8",
+            authDomain: "pcrsim.firebaseapp.com",
+            projectId: "pcrsim",
+            storageBucket: "pcrsim.firebasestorage.app",
+            messagingSenderId: "54561622876",
+            appId: "1:54561622876:web:2dab4c058f834b0e444f99"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'pcrsim';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let isTeacherMode = false;
+        let unlockedPostIds = new Set();
+        let activeStudent = null;
+        let targetPostIdForUnlock = null;
+
+        // In-memory sync state
+        let postsData = [];
+        let calendarNotesData = {};
+
+        // Calendar State
+        let currentYear = 2026;
+        let currentMonth = 2; // March (0-indexed)
+        let selectedCalendarDateStr = '';
+
+        function setupRealtimeListeners() {
+            // Real-time listener for assignment submissions
+            const assignmentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'assignments');
+            onSnapshot(assignmentsCol, (snapshot) => {
+                postsData = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                })).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                renderBoardList();
+            }, (err) => {
+                console.error("Assignments listener error:", err);
+            });
+
+            // Real-time listener for classroom calendar notes
+            const calendarCol = collection(db, 'artifacts', appId, 'public', 'data', 'calendarNotes');
+            onSnapshot(calendarCol, (snapshot) => {
+                calendarNotesData = {};
+                snapshot.docs.forEach(doc => {
+                    calendarNotesData[doc.id] = doc.data().note;
+                });
+                renderCalendar();
+            }, (err) => {
+                console.error("Calendar listener error:", err);
+            });
+        }
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth init error:", err);
+                await signInAnonymously(auth);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                setupRealtimeListeners();
+            }
+        });
+
+        initAuth();
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-btn');
+            const originalBtnText = submitBtn ? submitBtn.innerText : 'Firebase Cloud DB에 과제 제출하기';
+
+            try {
+                if (!currentUser) {
+                    showToast('서버 연결 중입니다. 사용자 인증을 확인하고 있습니다...');
+                    const userCred = await signInAnonymously(auth);
+                    currentUser = userCred.user;
+                }
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = '과제 제출 저장 중... 🐾';
+                }
+
+                const studentId = document.getElementById('student-id').value.trim();
+                const studentName = document.getElementById('student-name').value.trim();
+                const password = document.getElementById('student-password').value.trim();
+                const title = document.getElementById('post-title').value.trim();
+                const content = document.getElementById('post-content').value.trim();
+                const fileInput = document.getElementById('post-file');
+                
+                if (password.length < 2) {
+                    showToast('비밀번호를 최소 2자리 이상 설정해주세요.');
+                    return;
+                }
+
+                let fileName = null;
+                if (fileInput.files && fileInput.files.length > 0) {
+                    fileName = fileInput.files[0].name;
+                }
+
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                const autoFeedback = `김건형 선생님: ${studentName} 학생, 과제 제출 확인되었습니다! 꼼꼼히 검토 후 의견을 추가하겠습니다.`;
+
+                const newPost = {
+                    studentId,
+                    studentName,
+                    password,
+                    title,
+                    content,
+                    fileName,
+                    date: dateStr,
+                    createdAt: Date.now(),
+                    feedback: autoFeedback
+                };
+
+                const assignmentsCol = collection(db, 'artifacts', appId, 'public', 'data', 'assignments');
+                const docRef = await addDoc(assignmentsCol, newPost);
+
+                unlockedPostIds.add(docRef.id);
+                activeStudent = { studentId, studentName, password };
+
+                document.getElementById('submission-form').reset();
+                showToast('🎉 과제가 Firebase DB에 성공적으로 제출되었습니다!');
+                renderAuthUI();
+            } catch (err) {
+                console.error("Submission error:", err);
+                showToast('과제 제출 오류: ' + (err.message || '다시 시도해 주세요.'));
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalBtnText;
+                }
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            const target = document.getElementById('tab-' + tabId);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-pastel-100', 'text-pastel-700');
+                btn.classList.add('text-gray-600');
+            });
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.add('active', 'bg-pastel-100', 'text-pastel-700');
+                activeNav.classList.remove('text-gray-600');
+            }
+        }
+
+        function filterMaterials(category, targetBtn) {
+            document.querySelectorAll('.mat-filter-btn').forEach(btn => {
+                btn.classList.remove('active-filter', 'bg-pastel-500', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-600');
+            });
+            if (targetBtn) {
+                targetBtn.classList.add('active-filter', 'bg-pastel-500', 'text-white');
+                targetBtn.classList.remove('bg-gray-100', 'text-gray-600');
+            }
+
+            const items = document.querySelectorAll('.mat-item');
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains('mat-category-' + category)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        function searchMaterials() {
+            const query = document.getElementById('mat-search').value.toLowerCase();
+            const items = document.querySelectorAll('.mat-item');
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        function openVideoModal(url, title) {
+            document.getElementById('modal-video-title').innerText = title;
+            document.getElementById('modal-iframe').src = url;
+            document.getElementById('video-modal').classList.remove('hidden');
+        }
+
+        function closeVideoModal() {
+            document.getElementById('modal-iframe').src = '';
+            document.getElementById('video-modal').classList.add('hidden');
+        }
+
+        function downloadFile(fileName) {
+            showToast(`'${fileName}' 파일 다운로드를 시작합니다.`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            if (toast && toastMsg) {
+                toastMsg.innerText = message;
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 3000);
+            }
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            const monthYearText = document.getElementById('calendar-month-year');
+            if (!grid || !monthYearText) return;
+
+            monthYearText.innerText = `${currentYear}년 ${currentMonth + 1}월`;
+
+            const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+            const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            let html = '';
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                html += `<div class="min-h-[70px] sm:min-h-[85px] p-2 bg-gray-50/50 rounded-xl border border-dashed border-gray-100 opacity-40"></div>`;
+            }
+
+            const today = new Date();
+            const isCurrentMonthYear = today.getFullYear() === currentYear && today.getMonth() === currentMonth;
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasNote = Boolean(calendarNotesData[dateStr]);
+                const isToday = isCurrentMonthYear && today.getDate() === day;
+
+                const dayOfWeek = (firstDayIndex + day - 1) % 7;
+                let dayTextColor = 'text-gray-800';
+                if (dayOfWeek === 0) dayTextColor = 'text-red-500';
+                if (dayOfWeek === 6) dayTextColor = 'text-blue-500';
+
+                html += `
+                    <div onclick="openCalendarDate('${dateStr}')" 
+                         class="min-h-[70px] sm:min-h-[85px] p-1.5 sm:p-2 bg-white rounded-xl border ${isToday ? 'border-pastel-400 ring-2 ring-pastel-200' : 'border-gray-200'} ${hasNote ? 'bg-amber-50/40 border-amber-300' : ''} hover:border-pastel-400 cursor-pointer transition flex flex-col justify-between group shadow-2xs">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold ${dayTextColor} ${isToday ? 'bg-pastel-500 text-white w-5 h-5 rounded-full flex items-center justify-center' : ''}">
+                                ${day}
+                            </span>
+                            ${hasNote ? '<span class="text-[10px] text-amber-600 font-bold">🐾</span>' : ''}
+                        </div>
+                        
+                        <div class="mt-1 flex-grow">
+                            ${hasNote ? `
+                                <div class="bg-amber-100/80 border border-amber-200 text-amber-900 text-[10px] p-1 rounded-lg line-clamp-2 leading-snug">
+                                    ${calendarNotesData[dateStr]}
+                                </div>
+                            ` : `
+                                <div class="hidden group-hover:block text-[9px] text-gray-400 italic">
+                                    ${isTeacherMode ? '+ 특이사항 작성' : '일정 보기'}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        function openCalendarDate(dateStr) {
+            selectedCalendarDateStr = dateStr;
+            const existingNote = calendarNotesData[dateStr] || '';
+
+            document.getElementById('cal-modal-date').innerText = `${dateStr} 수업 특이사항`;
+            const modalBody = document.getElementById('cal-modal-body');
+            const modalActions = document.getElementById('cal-modal-actions');
+
+            if (isTeacherMode) {
+                modalBody.innerHTML = `
+                    <label class="block text-xs font-bold text-gray-700 mb-1">교사 메모 / 특이사항 작성</label>
+                    <textarea id="cal-note-input" rows="3" placeholder="해당 날짜의 수업 특이사항, 과제 마감일, 전달사항 등을 입력하세요..." class="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-pastel-300 focus:outline-none resize-none">${existingNote}</textarea>
+                    <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 p-2 rounded-lg">
+                        👨‍🏫 교사 모드로 작성 중입니다. 작성된 내용은 Firebase DB에 실시간 저장되어 모든 학생이 볼 수 있습니다.
+                    </p>
+                `;
+                modalActions.innerHTML = `
+                    ${existingNote ? `
+                        <button onclick="deleteCalendarNote()" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 text-xs font-bold rounded-xl transition">
+                            삭제
+                        </button>
+                    ` : ''}
+                    <button onclick="saveCalendarNote()" class="px-4 py-1.5 bg-pastel-500 hover:bg-pastel-600 text-white text-xs font-bold rounded-xl transition">
+                        저장하기
+                    </button>
+                `;
+            } else {
+                modalBody.innerHTML = `
+                    ${existingNote ? `
+                        <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 leading-relaxed font-medium">
+                            ${existingNote}
+                        </div>
+                    ` : `
+                        <div class="text-center py-6 text-gray-400 text-xs space-y-1">
+                            <span>🐾</span>
+                            <p>등록된 특이사항이나 수업 일정이 없습니다.</p>
+                        </div>
+                    `}
+                `;
+                modalActions.innerHTML = `
+                    <button onclick="closeCalendarModal()" class="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold rounded-xl transition">
+                        닫기
+                    </button>
+                `;
+            }
+
+            document.getElementById('calendar-modal').classList.remove('hidden');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').classList.add('hidden');
+        }
+
+        async function saveCalendarNote() {
+            if (!currentUser) return;
+            const input = document.getElementById('cal-note-input');
+            if (!input) return;
+            const text = input.value.trim();
+
+            const noteRef = doc(db, 'artifacts', appId, 'public', 'data', 'calendarNotes', selectedCalendarDateStr);
+
+            if (text) {
+                await setDoc(noteRef, { note: text, updatedAt: Date.now() });
+                showToast('🗓️ 달력 특이사항이 Firebase DB에 저장되었습니다!');
+            } else {
+                await deleteDoc(noteRef);
+                showToast('🗓️ 달력 특이사항이 삭제되었습니다.');
+            }
+
+            closeCalendarModal();
+        }
+
+        async function deleteCalendarNote() {
+            if (!currentUser) return;
+            const noteRef = doc(db, 'artifacts', appId, 'public', 'data', 'calendarNotes', selectedCalendarDateStr);
+            await deleteDoc(noteRef);
+            closeCalendarModal();
+            showToast('🗓️ 달력 특이사항이 삭제되었습니다.');
+        }
+
+        function selectAssignmentTask(taskTitle) {
+            switchTab('assignments');
+            const titleInput = document.getElementById('post-title');
+            if (titleInput) {
+                titleInput.value = taskTitle;
+                titleInput.focus();
+            }
+            
+            const formContainer = document.getElementById('submission-form-container');
+            if (formContainer) {
+                formContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            showToast(`'${taskTitle}' 과제가 선택되었습니다.`);
+        }
+
+        function renderAuthUI() {
+            const authContainer = document.getElementById('auth-container');
+            if (!authContainer) return;
+            
+            if (isTeacherMode) {
+                authContainer.innerHTML = `
+                    <div class="flex items-center space-x-2 bg-pastel-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>김건형 선생님 (교사 전체 조회 모드)</span>
+                    </div>
+                    <button onclick="exitTeacherMode()" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-lg font-medium transition">
+                        교사 모드 종료
+                    </button>
+                `;
+            } else if (activeStudent) {
+                authContainer.innerHTML = `
+                    <div class="flex items-center space-x-2 bg-pastel-100 border border-pastel-300 px-3 py-1.5 rounded-lg text-xs text-pastel-800 font-semibold">
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                        <span>${activeStudent.studentId} ${activeStudent.studentName} 인증됨</span>
+                    </div>
+                    <button onclick="logoutStudent()" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-lg font-medium transition">
+                        로그아웃
+                    </button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <button onclick="openTeacherModal()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
+                        <i class="fa-solid fa-user-gear text-pastel-300"></i>
+                        <span>교사 전용 조회</span>
+                    </button>
+                `;
+            }
+        }
+
+        function openTeacherModal() {
+            document.getElementById('teacher-modal').classList.remove('hidden');
+            document.getElementById('teacher-pwd-input').value = '';
+            document.getElementById('teacher-pwd-input').focus();
+        }
+
+        function closeTeacherModal() {
+            document.getElementById('teacher-modal').classList.add('hidden');
+        }
+
+        function verifyTeacherPassword() {
+            const inputPwd = document.getElementById('teacher-pwd-input').value;
+            if (inputPwd === '1234') {
+                isTeacherMode = true;
+                activeStudent = null;
+                closeTeacherModal();
+                showToast('👨‍🏫 김건형 선생님 인증 성공! 모든 학생 과제 및 달력 작성이 가능합니다.');
+                renderAuthUI();
+                renderBoardList();
+                renderCalendar();
+            } else {
+                showToast('교사 비밀번호가 일치하지 않습니다. (기본: 1234)');
+            }
+        }
+
+        function exitTeacherMode() {
+            isTeacherMode = false;
+            showToast('교사 조회가 종료되었습니다.');
+            renderAuthUI();
+            renderBoardList();
+            renderCalendar();
+        }
+
+        function logoutStudent() {
+            activeStudent = null;
+            showToast('로그아웃 되었습니다.');
+            renderAuthUI();
+            renderBoardList();
+        }
+
+        function openPwdModal(postId) {
+            targetPostIdForUnlock = postId;
+            document.getElementById('pwd-modal').classList.remove('hidden');
+            document.getElementById('modal-pwd-input').value = '';
+            document.getElementById('modal-pwd-input').focus();
+        }
+
+        function closePwdModal() {
+            document.getElementById('pwd-modal').classList.add('hidden');
+            targetPostIdForUnlock = null;
+        }
+
+        function verifyModalPassword() {
+            const inputPwd = document.getElementById('modal-pwd-input').value;
+            const target = postsData.find(p => p.id === targetPostIdForUnlock);
+
+            if (target && target.password === inputPwd) {
+                unlockedPostIds.add(target.id);
+                closePwdModal();
+                showToast('🔓 비밀번호가 확인되어 과제 내용이 열람 가능해졌습니다!');
+                renderBoardList();
+            } else {
+                showToast('비밀번호가 일치하지 않습니다.');
+            }
+        }
+
+        async function deletePost(id) {
+            if (!currentUser) return;
+            const target = postsData.find(p => p.id === id);
+            if (!target) return;
+
+            const isOwner = activeStudent && activeStudent.studentId === target.studentId && activeStudent.password === target.password;
+            
+            if (!isTeacherMode && !isOwner) {
+                showToast('본인의 과제만 삭제할 수 있습니다.');
+                return;
+            }
+
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'assignments', id);
+            await deleteDoc(docRef);
+            showToast('제출된 과제가 Firebase DB에서 삭제되었습니다.');
+        }
+
+        function renderBoardList() {
+            const boardContainer = document.getElementById('board-list');
+            if (!boardContainer) return;
+
+            if (postsData.length === 0) {
+                boardContainer.innerHTML = `
+                    <div class="text-center py-12 bg-white border border-gray-200 rounded-xl text-gray-400 text-xs">
+                        등록된 과제가 없습니다.
+                    </div>
+                `;
+                return;
+            }
+
+            boardContainer.innerHTML = postsData.map(post => {
+                const isOwner = activeStudent && activeStudent.studentId === post.studentId && activeStudent.password === post.password;
+                const isUnlocked = isTeacherMode || isOwner || unlockedPostIds.has(post.id);
+
+                return `
+                <div class="bg-white border ${isUnlocked ? 'border-pastel-300 ring-1 ring-pastel-200' : 'border-gray-200'} rounded-xl p-5 shadow-xs space-y-3 transition">
+                    <div class="flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-pastel-100 text-pastel-700 font-bold px-2 py-0.5 rounded">
+                                과제 제출
+                            </span>
+                            <span class="font-semibold text-gray-800">${post.studentId} ${post.studentName}</span>
+                            ${isOwner ? '<span class="bg-emerald-100 text-emerald-700 text-[10px] px-1.5 py-0.5 rounded font-bold">내 제출물</span>' : ''}
+                            ${isTeacherMode ? '<span class="bg-purple-100 text-purple-700 text-[10px] px-1.5 py-0.5 rounded font-bold">교사 전체 열람 중</span>' : ''}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-400 text-[11px]">${post.date}</span>
+                            ${(isTeacherMode || isOwner) ? `
+                                <button onclick="deletePost('${post.id}')" class="text-red-400 hover:text-red-600 font-medium text-[11px] ml-2">
+                                    <i class="fa-solid fa-trash-can"></i> 삭제
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <h3 class="font-bold text-gray-900 text-sm flex items-center justify-between">
+                        <span>${post.title}</span>
+                        ${!isUnlocked ? '<span class="text-xs text-amber-600 font-normal"><i class="fa-solid fa-lock text-xs mr-1"></i>비공개</span>' : '<span class="text-xs text-emerald-600 font-normal"><i class="fa-solid fa-lock-open text-xs mr-1"></i>열람됨</span>'}
+                    </h3>
+                    
+                    ${isUnlocked ? `
+                        <p class="text-xs text-gray-700 leading-relaxed whitespace-pre-line bg-gray-50/60 p-3 rounded-lg border border-gray-100">${post.content}</p>
+                        
+                        ${post.fileName ? `
+                            <div class="bg-pastel-50/50 border border-pastel-200 rounded-lg p-2.5 flex items-center justify-between text-xs text-gray-700">
+                                <div class="flex items-center space-x-2 overflow-hidden">
+                                    <i class="fa-solid fa-file-arrow-down text-pastel-600"></i>
+                                    <span class="font-medium truncate">${post.fileName}</span>
+                                </div>
+                                <button onclick="downloadFile('${post.fileName}')" class="text-pastel-700 font-bold hover:underline shrink-0 text-[11px]">다운로드</button>
+                            </div>
+                        ` : ''}
+
+                        ${post.feedback ? `
+                            <div class="bg-pastel-50 border border-pastel-200 rounded-lg p-3 text-xs space-y-1">
+                                <div class="font-bold text-pastel-800 flex items-center space-x-1">
+                                    <i class="fa-solid fa-comment-dots text-pastel-500"></i>
+                                    <span>선생님 피드백</span>
+                                </div>
+                                <p class="text-pastel-900">${post.feedback}</p>
+                            </div>
+                        ` : ''}
+                    ` : `
+                        <div class="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                            <div class="flex items-center space-x-2 text-gray-500">
+                                <i class="fa-solid fa-user-lock text-pastel-500 text-base"></i>
+                                <span>🔒 학생 개인정보 및 과제 보호를 위해 비공개로 설정된 게시글입니다.</span>
+                            </div>
+                            <button onclick="openPwdModal('${post.id}')" class="shrink-0 bg-pastel-50 hover:bg-pastel-100 border border-pastel-300 text-pastel-700 font-bold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
+                                <i class="fa-solid fa-key text-xs"></i>
+                                <span>비밀번호 입력하여 열람</span>
+                            </button>
+                        </div>
+                    `}
+                </div>
+            `}).join('');
+        }
+
+        window.switchTab = switchTab;
+        window.filterMaterials = filterMaterials;
+        window.searchMaterials = searchMaterials;
+        window.openVideoModal = openVideoModal;
+        window.closeVideoModal = closeVideoModal;
+        window.downloadFile = downloadFile;
+        window.selectAssignmentTask = selectAssignmentTask;
+        window.handleFormSubmit = handleFormSubmit;
+        window.deletePost = deletePost;
+        window.renderBoardList = renderBoardList;
+        window.openCalendarDate = openCalendarDate;
+        window.closeCalendarModal = closeCalendarModal;
+        window.saveCalendarNote = saveCalendarNote;
+        window.deleteCalendarNote = deleteCalendarNote;
+        window.changeMonth = changeMonth;
+        window.renderCalendar = renderCalendar;
+        window.openTeacherModal = openTeacherModal;
+        window.closeTeacherModal = closeTeacherModal;
+        window.verifyTeacherPassword = verifyTeacherPassword;
+        window.exitTeacherMode = exitTeacherMode;
+        window.logoutStudent = logoutStudent;
+        window.openPwdModal = openPwdModal;
+        window.closePwdModal = closePwdModal;
+        window.verifyModalPassword = verifyModalPassword;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('submission-form');
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+            }
+            renderAuthUI();
+            renderBoardList();
+            renderCalendar();
+        });
+    </script>
+</body>
+</html>
